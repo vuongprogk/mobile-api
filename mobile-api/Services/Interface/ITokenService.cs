@@ -1,6 +1,6 @@
 ﻿using mobile_api.Models;
 
-namespace mobile_api.Interfaces
+namespace mobile_api.Services.Interface
 {
     public interface ITokenService
     {

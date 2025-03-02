@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mobile_api.Dtos.User;
-using mobile_api.Interfaces;
 using mobile_api.Responses;
+using mobile_api.Services.Interface;
 
 namespace mobile_api.Controllers
 {
@@ -11,30 +11,28 @@ namespace mobile_api.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly ILogger<AuthController> _logger;
-        public AuthController(ILogger<AuthController> logger, ITokenService tokenService)
+        private readonly IAuthService _authService;
+        public AuthController(ILogger<AuthController> logger, ITokenService tokenService, IAuthService authService)
         {
             _logger = logger;
             _tokenService = tokenService;
+            _authService = authService;
         }
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
             _logger.LogInformation($"{nameof(AuthController)} action: {nameof(Login)} param {request}");
-            if (request.Username == "admin" && request.Password == "admin")
+            var response = new GlobalResponse()
             {
-                var response = new GlobalResponse()
+                Status = StatusCodes.Status200OK,
+                Message = "Login successful",
+                Data = _tokenService.CreateToken(new Models.User()
                 {
-                    Status = StatusCodes.Status200OK,
-                    Message = "Login successful",
-                    Data = _tokenService.CreateToken(new Models.User()
-                    {
-                        Username = request.Username,
-                        Password = request.Password
-                    })
-                };
-                return new JsonResult(response);
-            }
-            return Unauthorized();
+                    Username = request.Username,
+                    Password = request.Password
+                })
+            };
+            return new JsonResult(response);
         }
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterRequest request)

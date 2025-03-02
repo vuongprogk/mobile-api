@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using mobile_api.Interfaces;
 using mobile_api.Models;
+using mobile_api.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
