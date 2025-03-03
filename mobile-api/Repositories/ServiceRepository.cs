@@ -1,38 +1,62 @@
-﻿using mobile_api.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using mobile_api.Data;
+using mobile_api.Models;
 using mobile_api.Repositories.Interfaces;
 
 namespace mobile_api.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
-        public Task<bool> AddServiceAsync(Service service)
+        private readonly ILogger<ServiceRepository> _logger;
+        private readonly ApplicationDbContext _context;
+        public ServiceRepository(ApplicationDbContext context, ILogger<ServiceRepository> logger)
         {
-            throw new NotImplementedException();
+            _logger = logger;
+            _context = context;
+        }
+        public async Task<bool> AddServiceAsync(Service service)
+        {
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(AddServiceAsync)}");
+            await _context.Services.AddAsync(service);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> DeleteServiceAsync(string id)
+        public async Task<bool> DeleteServiceAsync(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(DeleteServiceAsync)}");
+            var service = await _context.Services.FirstOrDefaultAsync(item => item.Id == id);
+            if (service == null)
+            {
+                return false;
+            }
+            _context.Services.Remove(service);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<Service> GetServiceByIdAsync(string id)
+        public async Task<Service> GetServiceByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(GetServiceByIdAsync)}");
+            return await _context.Services.FirstOrDefaultAsync(item => item.Id == id);
         }
 
-        public Task<IEnumerable<Service>> GetServicesAsync()
+        public async Task<IEnumerable<Service>> GetServicesAsync()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(GetServicesAsync)}");
+            return await _context.Services.ToListAsync();
         }
 
-        public Task<IEnumerable<Service>> GetServicesByTourIdAsync(string tourId)
+        public async Task<IEnumerable<Service>> GetServicesByTourIdAsync(string tourId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(GetServicesByTourIdAsync)}");
+            var services = _context.Services.Where(item => item.TourId == tourId);
+            return await services.ToListAsync();
         }
 
-        public Task<bool> UpdateServiceAsync(Service service)
+        public async Task<bool> UpdateServiceAsync(Service service)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(UpdateServiceAsync)}");
+            _context.Services.Update(service);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

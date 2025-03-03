@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace mobile_api.Models
 {
@@ -9,5 +10,7 @@ namespace mobile_api.Models
         [Required]
         public string Title { get; set; }
         public string AgeGroup { get; set; }
+        [Required]
+        public string UserId { get; set; }
     }
 }

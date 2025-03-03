@@ -14,6 +14,7 @@ namespace mobile_api.Data
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Book> Bookings { get; set; }
         public DbSet<Service> Services { get; set; }
-        
+        public DbSet<Ticket> Tickets { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using mobile_api.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using mobile_api.Data;
 using mobile_api.Models;
 using mobile_api.Repositories.Interfaces;
 
@@ -13,34 +14,59 @@ namespace mobile_api.Repositories
             _db = context;
             _logger = logger;
         }
-        public Task<bool> AddBookAsync(Book book)
+        public async Task<bool> AddBookAsync(Book book)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(AddBookAsync)}");
+            _db.Add(book);
+            return await _db.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> DeleteBookAsync(string id)
+        public async Task<bool> DeleteBookAsync(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(DeleteBookAsync)}");
+            var book = await _db.Bookings.FirstOrDefaultAsync(item => item.Id == id);
+            if (book == null)
+            {
+                return false;
+            }
+            _db.Bookings.Remove(book);
+            return await _db.SaveChangesAsync() > 0;
         }
 
-        public Task<Book> GetBookByIdAsync(string id)
+        public async Task<Book> GetBookByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(GetBookByIdAsync)}");
+            return await _db.Bookings.FirstOrDefaultAsync(item => item.Id == id);
         }
 
-        public Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<Book>> GetBookByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(GetBookByUsernameAsync)}");
+            var userId = await _db.Users.FirstOrDefaultAsync(item => item.Username == username);
+            if (userId == null)
+            {
+                return null;
+            }
+            return await _db.Bookings.Where(item => item.UserId == userId.Id).ToListAsync();
         }
 
-        public Task<IEnumerable<Book>> GetBooksByUserIdAsync(string authorId)
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(GetBooksAsync)}");
+            return await _db.Bookings.ToListAsync();
         }
 
-        public Task<bool> UpdateBookAsync(Book book)
+        public async Task<IEnumerable<Book>> GetBooksByUserIdAsync(string authorId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(GetBooksByUserIdAsync)}");
+            return await _db.Bookings.Where(item => item.UserId == authorId).ToListAsync();
+        }
+
+        public async Task<bool> UpdateBookAsync(Book book)
+        {
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(UpdateBookAsync)}");
+            _db.Update(book);
+            return await _db.SaveChangesAsync() > 0;
         }
     }
 }

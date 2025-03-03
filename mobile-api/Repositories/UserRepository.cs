@@ -1,23 +1,53 @@
-﻿using mobile_api.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using mobile_api.Data;
+using mobile_api.Models;
 using mobile_api.Repositories.Interfaces;
 
 namespace mobile_api.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task<bool> AddNewUserAsync(User user)
+        private readonly ILogger<UserRepository> _logger;
+        private readonly ApplicationDbContext _context;
+        public UserRepository(ApplicationDbContext context, ILogger<UserRepository> logger)
         {
-            throw new NotImplementedException();
+            _context = context;
+            _logger = logger;
+        }
+       
+        public async Task<bool> AddNewUserAsync(User user)
+        {
+            _logger.LogInformation($"{nameof(UserRepository)} action: {nameof(AddNewUserAsync)}");
+            var result = await _context.Users.AddAsync(user);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<User> GetUserByNameAsync(string username)
+        public async Task<User> GetUserByNameAsync(string username)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(UserRepository)} action: {nameof(GetUserByNameAsync)}");
+            return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
         }
 
-        public Task<bool> UpdateUserAsync(User user)
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(UserRepository)} action: {nameof(GetUsers)}");
+            return await _context.Users.ToListAsync();
+        }
+
+
+        public async Task<bool> UpdateUserAsync(User user, string id)
+        {
+            _logger.LogInformation($"{nameof(UserRepository)} action: {nameof(UpdateUserAsync)}");
+            var userToUpdate = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (userToUpdate == null)
+            {
+                return false;
+            }
+            userToUpdate.Username = user.Username;
+            userToUpdate.HashPassword = user.HashPassword;
+            userToUpdate.Email = user.Email;
+            _context.Users.Update(userToUpdate);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

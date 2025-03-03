@@ -9,5 +9,6 @@ namespace mobile_api.Repositories.Interfaces
         public Task<bool> AddTicketAsync(Ticket ticket);
         public Task<bool> UpdateTicketAsync(Ticket ticket);
         public Task<bool> DeleteTicketAsync(string id);
+        Task<Ticket> GetTicketByIdAsync(string id);
     }
 }

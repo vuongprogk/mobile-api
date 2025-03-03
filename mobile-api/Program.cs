@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using mobile_api.Data;
+using mobile_api.ExceptionHandlers;
 using mobile_api.Repositories;
 using mobile_api.Repositories.Interfaces;
 using mobile_api.Services;
@@ -47,5 +48,5 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseExceptionHandler(setting => { });
 app.Run();
