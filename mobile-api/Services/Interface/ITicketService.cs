@@ -8,5 +8,6 @@ namespace mobile_api.Services.Interface
         Task<bool> CreateTicket(Ticket ticket);
         Task<Ticket> GetTicketById(string id);
         Task<IEnumerable<Ticket>> GetTickets();
+        Task<IEnumerable<Ticket>> GetTicketsByUserId(string userId);
     }
 }

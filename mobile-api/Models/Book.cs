@@ -15,5 +15,6 @@ namespace mobile_api.Models
         public Tour Tour { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
         public int Quantity { get; set; }
+        public string Status { get; set; } = "Pending";
     }
 }

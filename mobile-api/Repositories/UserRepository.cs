@@ -34,6 +34,11 @@ namespace mobile_api.Repositories
             return await _context.Users.ToListAsync();
         }
 
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync(Role role)
+        {
+            _logger.LogInformation($"{nameof(UserRepository)} action: {nameof(GetUsersByRoleAsync)}");
+            return await _context.Users.Where(x => x.Role == role).ToListAsync();
+        }
 
         public async Task<bool> UpdateUserAsync(User user, string id)
         {
@@ -46,6 +51,7 @@ namespace mobile_api.Repositories
             userToUpdate.Username = user.Username;
             userToUpdate.HashPassword = user.HashPassword;
             userToUpdate.Email = user.Email;
+            userToUpdate.Role = user.Role;
             _context.Users.Update(userToUpdate);
             return await _context.SaveChangesAsync() > 0;
         }

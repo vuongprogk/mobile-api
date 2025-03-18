@@ -10,5 +10,8 @@ namespace mobile_api.Services.Interface
         Task<bool> UpdateUser(User user, string id);
         Task<bool> CreateUser(User user);
         Task<User> GetUserById(string id);
+        Task<IEnumerable<User>> GetUsersByRoleAsync(Role role);
+        Task<bool> UpdateUserRoleAsync(string userId, Role newRole);
+        Task<bool> IsUserAdminAsync(string username);
     }
 }

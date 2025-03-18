@@ -12,6 +12,7 @@ namespace mobile_api.Models
         [MinLength(8)]
         public string HashPassword { get; set; }
         public string Email { get; set; } = string.Empty;
-
+        [Required]
+        public Role Role { get; set; } = Role.User;
     }
 }

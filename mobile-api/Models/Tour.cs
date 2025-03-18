@@ -13,5 +13,6 @@ namespace mobile_api.Models
         public decimal Price { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.MinValue;
+        public string Description { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mobile_api.Dtos.User;
 using mobile_api.Models;
@@ -10,6 +11,7 @@ namespace mobile_api.Controllers
 {
     [ApiController]
     [Route("api/user")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -20,14 +22,15 @@ namespace mobile_api.Controllers
             _userService = userService;
         }
         [HttpGet("GetUsers")]
-        public IActionResult GetUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsers()
         {
             try
             {
                 _logger.LogInformation($"{nameof(UserController)} action: {nameof(GetUsers)}");
                 var response = new GlobalResponse()
                 {
-                    Data = _userService.GetUsers(),
+                    Data = await _userService.GetUsers(),
                     Message = "Get users success",
                     StatusCode = 200
                 };
@@ -44,6 +47,7 @@ namespace mobile_api.Controllers
             }
         }
         [HttpGet("GetUserById/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUserById(string id)
         {
             try
@@ -68,6 +72,7 @@ namespace mobile_api.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
             try
@@ -92,7 +97,8 @@ namespace mobile_api.Controllers
                 });
             }
         }
-        [HttpPut("UpdateUser")]
+        [HttpPut("UpdateUser/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest update, [FromRoute] string id)
         {
             try
@@ -110,6 +116,56 @@ namespace mobile_api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{nameof(UserController)} action: {nameof(UpdateUser)} error");
+                return StatusCode(500, new GlobalResponse()
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+        [HttpPut("UpdateUserRole/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUserRole([FromRoute] string id, [FromBody] Role newRole)
+        {
+            try
+            {
+                _logger.LogInformation($"{nameof(UserController)} action: {nameof(UpdateUserRole)}");
+                var response = new GlobalResponse()
+                {
+                    Data = await _userService.UpdateUserRoleAsync(id, newRole),
+                    Message = "Update user role success",
+                    StatusCode = 200
+                };
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(UserController)} action: {nameof(UpdateUserRole)} error");
+                return StatusCode(500, new GlobalResponse()
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+        [HttpGet("GetUsersByRole/{role}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsersByRole([FromRoute] Role role)
+        {
+            try
+            {
+                _logger.LogInformation($"{nameof(UserController)} action: {nameof(GetUsersByRole)}");
+                var response = new GlobalResponse()
+                {
+                    Data = await _userService.GetUsersByRoleAsync(role),
+                    Message = "Get users by role success",
+                    StatusCode = 200
+                };
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(UserController)} action: {nameof(GetUsersByRole)} error");
                 return StatusCode(500, new GlobalResponse()
                 {
                     Message = ex.Message,

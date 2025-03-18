@@ -8,5 +8,6 @@ namespace mobile_api.Repositories.Interfaces
         public Task<bool> AddNewUserAsync(User user);
         public Task<bool> UpdateUserAsync(User user, string id);
         public Task<IEnumerable<User>> GetUsers();
+        public Task<IEnumerable<User>> GetUsersByRoleAsync(Role role);
     }
 }

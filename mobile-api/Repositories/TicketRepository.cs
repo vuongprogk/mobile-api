@@ -36,13 +36,18 @@ namespace mobile_api.Repositories
         public async Task<Ticket> GetTicketByIdAsync(string id)
         {
             _logger.LogInformation($"{nameof(TicketRepository)} action: {nameof(GetTicketByIdAsync)}");
-            return await _context.Tickets.FirstOrDefaultAsync(item => item.Id == id);
+            if (string.IsNullOrEmpty(id))
+            {
+                _logger.LogWarning("Invalid ticket ID provided");
+                return null;
+            }
+            return await _context.Tickets.FindAsync(id);
         }
 
-        public async Task<Ticket> GetTicketByUserIdAsync(string id)
+        public async Task<IEnumerable<Ticket>> GetTicketByUserIdAsync(string id)
         {
             _logger.LogInformation($"{nameof(TicketRepository)} action: {nameof(GetTicketByUserIdAsync)}");
-            return await _context.Tickets.FirstOrDefaultAsync(item => item.UserId == id);
+            return await _context.Tickets.Where(item => item.UserId == id).ToListAsync();
         }
 
         public async Task<IEnumerable<Ticket>> GetTicketsAsync()

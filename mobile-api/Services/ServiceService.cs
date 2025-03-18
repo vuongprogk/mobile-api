@@ -30,5 +30,17 @@ namespace mobile_api.Services
             _logger.LogInformation($"{nameof(ServiceService)} action: {nameof(GetServices)}");
             return await _service.GetServicesAsync();
         }
+
+        public async Task<bool> CreateService(Service service)
+        {
+            _logger.LogInformation($"{nameof(ServiceService)} action: {nameof(CreateService)}");
+            return await _service.AddServiceAsync(service);
+        }
+
+        public async Task<bool> UpdateService(Service service)
+        {
+            _logger.LogInformation($"{nameof(ServiceService)} action: {nameof(UpdateService)}");
+            return await _service.UpdateServiceAsync(service);
+        }
     }
 }

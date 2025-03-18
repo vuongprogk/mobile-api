@@ -7,5 +7,6 @@ namespace mobile_api.Services.Interface
         Task<bool> CreateTour(Tour tour);
         Task<Tour> GetTourById(string id);
         Task<IEnumerable<Tour>> GetTours();
+        Task<bool> UpdateTour(Tour tour);
     }
 }

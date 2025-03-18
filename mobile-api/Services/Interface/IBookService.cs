@@ -8,5 +8,6 @@ namespace mobile_api.Services.Interface
         public Task<Book> GetBookById(string id);
         public Task<bool> CreateBook(Book book);
         public Task<IEnumerable<Book>> GetBookByUsername(string username);
+        public Task<IEnumerable<Book>> GetBooksByUserId(string userId);
     }
 }

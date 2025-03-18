@@ -36,5 +36,11 @@ namespace mobile_api.Services
             _logger.LogInformation($"{nameof(BookService)} action: {nameof(GetBooks)}");
             return await _book.GetBooksAsync();
         }
+
+        public async Task<IEnumerable<Book>> GetBooksByUserId(string userId)
+        {
+            _logger.LogInformation($"{nameof(BookService)} action: {nameof(GetBooksByUserId)}");
+            return await _book.GetBooksByUserIdAsync(userId);
+        }
     }
 }

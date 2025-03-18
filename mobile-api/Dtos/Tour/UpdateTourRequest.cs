@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace mobile_api.Dtos.Tour
 {
-    public class CreateTourRequest
+    public class UpdateTourRequest
     {
         [Required(ErrorMessage = "Name is required")]
         [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
@@ -23,4 +23,4 @@ namespace mobile_api.Dtos.Tour
         [Compare("StartDate", ErrorMessage = "End date must be after start date")]
         public DateTime EndDate { get; set; }
     }
-}
+} 
