@@ -10,6 +10,7 @@ using mobile_api.Services;
 using mobile_api.Services.Interface;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication;
+using mobile_api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,7 +107,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
-
+app.UseMiddleware<AuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

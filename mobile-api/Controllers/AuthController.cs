@@ -36,10 +36,14 @@ namespace mobile_api.Controllers
                         StatusCode = 401
                     });
                 }
-                Response.Cookies.Append("auth", token);
+                Response.Cookies.Append("auth", token, new CookieOptions {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddHours(2)
+                });
                 var response = new GlobalResponse()
                 {
-                    Data = token,
                     Message = "Login success",
                     StatusCode = 200
                 };
