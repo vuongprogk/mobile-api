@@ -19,7 +19,7 @@ namespace mobile_api.Services
         public async Task<string> LoginAsync(LoginRequest login)
         {
             var isExits = await _userService.GetUserByUsernameAsync(login.Username);
-            if (isExits == null)
+            if (isExits == null && string.IsNullOrEmpty(isExits?.Username))
             {
                 return null;
             }
