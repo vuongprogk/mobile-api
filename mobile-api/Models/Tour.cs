@@ -14,5 +14,6 @@ namespace mobile_api.Models
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.MinValue;
         public string Description { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

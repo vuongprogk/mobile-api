@@ -16,7 +16,7 @@ namespace mobile_api.Services
             _userService = user;
             _tokenService = tokenService;
         }
-        public async Task<string> LoginAsync(LoginRequest login)
+        public async Task<string?> LoginAsync(LoginRequest login)
         {
             var isExits = await _userService.GetUserByUsernameAsync(login.Username);
             if (isExits == null && string.IsNullOrEmpty(isExits?.Username))
@@ -24,11 +24,13 @@ namespace mobile_api.Services
                 return null;
             }
             var verify = BCrypt.Net.BCrypt.Verify(login.Password, isExits.HashPassword);
-            if (!verify)
-            {
-                return null;
-            }
-            return _tokenService.CreateToken(isExits);
+            return !verify ? null : _tokenService.CreateToken(isExits);
+        }
+
+        public Task<User> GetUserByUsernameAsync(string username)
+        {
+            _logger.LogInformation($"{nameof(AuthService)} action: {nameof(GetUserByUsernameAsync)}");
+            return _userService.GetUserByUsernameAsync(username);
         }
 
         public async Task<bool> RegisterAsync(RegisterRequest user)

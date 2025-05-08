@@ -22,5 +22,11 @@ namespace mobile_api.Dtos.Tour
         [Required(ErrorMessage = "End date is required")]
         [Compare("StartDate", ErrorMessage = "End date must be after start date")]
         public DateTime EndDate { get; set; }
+        
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
+        public string Description { get; set; }
+        [Required(ErrorMessage = "Image is required")]
+        public IFormFile Image { get; set; }
     }
 } 

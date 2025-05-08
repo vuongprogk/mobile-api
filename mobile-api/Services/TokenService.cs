@@ -9,7 +9,7 @@ namespace mobile_api.Services
 {
     public class TokenService : ITokenService
     {
-        public string CreateToken(User user)
+        public string? CreateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("Jv4;_^w^V/i{$fn;&FgRC6kSX'KHdZr8`of^=.&qSnKXi5[D>I'!4lYElpFn1\"-");

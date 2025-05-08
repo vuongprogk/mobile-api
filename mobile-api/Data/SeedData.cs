@@ -60,7 +60,8 @@ namespace mobile_api.Data
                         Price = 299.99m,
                         StartDate = DateTime.Now.AddDays(7),
                         EndDate = DateTime.Now.AddDays(10),
-                        Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package"
+                        Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package",
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
                     },
                     new Tour
                     {
@@ -69,7 +70,8 @@ namespace mobile_api.Data
                         Price = 149.99m,
                         StartDate = DateTime.Now.AddDays(5),
                         EndDate = DateTime.Now.AddDays(6),
-                        Description = "Explore the historic charm of Hoi An Ancient Town"
+                        Description = "Explore the historic charm of Hoi An Ancient Town",
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
                     },
                     new Tour
                     {
@@ -78,7 +80,8 @@ namespace mobile_api.Data
                         Price = 199.99m,
                         StartDate = DateTime.Now.AddDays(10),
                         EndDate = DateTime.Now.AddDays(12),
-                        Description = "Trek through the beautiful terraced rice fields of Sapa"
+                        Description = "Trek through the beautiful terraced rice fields of Sapa",
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
                     },
                     new Tour
                     {
@@ -87,7 +90,8 @@ namespace mobile_api.Data
                         Price = 249.99m,
                         StartDate = DateTime.Now.AddDays(15),
                         EndDate = DateTime.Now.AddDays(17),
-                        Description = "Discover the vibrant life along the Mekong Delta"
+                        Description = "Discover the vibrant life along the Mekong Delta",
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
                     },
                     new Tour
                     {
@@ -96,7 +100,8 @@ namespace mobile_api.Data
                         Price = 179.99m,
                         StartDate = DateTime.Now.AddDays(20),
                         EndDate = DateTime.Now.AddDays(21),
-                        Description = "Visit the historic Imperial City of Hue"
+                        Description = "Visit the historic Imperial City of Hue",
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
                     }
                 };
 

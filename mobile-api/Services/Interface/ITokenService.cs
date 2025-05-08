@@ -5,7 +5,7 @@ namespace mobile_api.Services.Interface
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        string? CreateToken(User user);
         ClaimsPrincipal ValidateToken(string token);
     }
 }

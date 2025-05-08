@@ -31,7 +31,7 @@ namespace mobile_api.Controllers
                 _logger.LogInformation($"{nameof(TourController)} action: {nameof(GetTours)}");
                 var tours = await _tourService.GetTours();
                 var tourResponses = tours.Adapt<IEnumerable<TourResponse>>();
-                
+
                 var response = new GlobalResponse()
                 {
                     Data = tourResponses,
@@ -90,7 +90,7 @@ namespace mobile_api.Controllers
 
         [HttpPost("CreateTour")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateTour([FromBody] CreateTourRequest request)
+        public async Task<IActionResult> CreateTour([FromForm] CreateTourRequest request)
         {
             try
             {
@@ -105,7 +105,33 @@ namespace mobile_api.Controllers
                 }
 
                 _logger.LogInformation($"{nameof(TourController)} action: {nameof(CreateTour)}");
+                if (request.Image == null || request.Image.Length == 0)
+                {
+                    return BadRequest(new GlobalResponse()
+                    {
+                        Message = "Image is required",
+                        StatusCode = 400
+                    });
+                }
+                // persist image to server
+                // create directory if not exists
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                // generate image name
+                var imageName = Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName);
+                
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
                 var tour = request.Adapt<Tour>();
+                // wrap image link by wwwroot to access from client
+                imageName = Path.Combine("images", imageName);
+                tour.ImageUrl = imageName;
                 var result = await _tourService.CreateTour(tour);
 
                 if (!result)
@@ -152,13 +178,10 @@ namespace mobile_api.Controllers
                         Data = ModelState.Values.SelectMany(v => v.Errors)
                     });
                 }
-
-                _logger.LogInformation($"{nameof(TourController)} action: {nameof(UpdateTour)}");
-                var tour = request.Adapt<Tour>();
-                tour.Id = id;
-
-                var result = await _tourService.UpdateTour(tour);
-                if (!result)
+                // check if tour exists
+                var tourExists = await _tourService.GetTourById(id);
+                var persistImageOld = tourExists.ImageUrl;
+                if (tourExists == null)
                 {
                     return NotFound(new GlobalResponse()
                     {
@@ -166,8 +189,52 @@ namespace mobile_api.Controllers
                         StatusCode = 404
                     });
                 }
+                _logger.LogInformation($"{nameof(TourController)} action: {nameof(UpdateTour)}");
+                // check if image is null
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    // persist image to server
+                    // create directory if not exists
+                    var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                    // generate image name
+                    var imageName = Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName);
+                    
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await request.Image.CopyToAsync(stream);
+                    }
+                    // wrap image link by wwwroot to access from client
+                    imageName = Path.Combine("images", imageName);
+                    tourExists.ImageUrl = imageName;
+                }
+                
+                
+                
+                var result = await _tourService.UpdateTour(tourExists);
+                if (!result)
+                {
+                    return BadRequest(new GlobalResponse()
+                    {
+                        Message = "Failed to update tour",
+                        StatusCode = 400
+                    });
+                }
+                // delete old image
+                if (persistImageOld != null)
+                {
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", persistImageOld);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
 
-                var tourResponse = tour.Adapt<TourResponse>();
+                var tourResponse = tourExists.Adapt<TourResponse>();
                 var response = new GlobalResponse()
                 {
                     Data = tourResponse,

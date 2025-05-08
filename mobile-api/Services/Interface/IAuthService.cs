@@ -6,6 +6,7 @@ namespace mobile_api.Services.Interface
     public interface IAuthService
     {
         public Task<bool> RegisterAsync(RegisterRequest user);
-        public Task<string> LoginAsync(LoginRequest login);
+        public Task<string?> LoginAsync(LoginRequest login);
+        public Task<User> GetUserByUsernameAsync(string username);
     }
 }

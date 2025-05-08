@@ -1,10 +1,8 @@
-﻿using Mapster;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using mobile_api.Dtos.User;
-using mobile_api.Models;
 using mobile_api.Responses;
 using mobile_api.Services.Interface;
-using System.Threading.Tasks;
 
 namespace mobile_api.Controllers
 {
@@ -27,6 +25,31 @@ namespace mobile_api.Controllers
             try
             {
                 _logger.LogInformation($"{nameof(AuthController)} action: {nameof(Login)} param {request}");
+                var user = await _authService.GetUserByUsernameAsync(request.Username);
+                if (user == null)
+                {
+                    return new JsonResult(new GlobalResponse()
+                    {
+                        Message = "User not found",
+                        StatusCode = 404
+                    });
+                }
+
+                var userInfo = new
+                {
+                    user.Username,
+                    user.Role,
+                    Theme = "Dark"
+                };
+                var cookieValue = JsonSerializer.Serialize(userInfo);
+                Response.Cookies.Append("userInfo", cookieValue, new CookieOptions
+                {
+                    HttpOnly = false, // Set to true if you don't want frontend JS to access it
+                    Secure = true, // Use HTTPS
+                    SameSite = SameSiteMode.None, // Required for cross-site cookies
+                    Path = "/",
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
+                });
                 var token = await _authService.LoginAsync(request);
                 if (string.IsNullOrEmpty(token))
                 {
@@ -36,7 +59,9 @@ namespace mobile_api.Controllers
                         StatusCode = 401
                     });
                 }
-                Response.Cookies.Append("auth", token, new CookieOptions {
+
+                Response.Cookies.Append("auth", token, new CookieOptions
+                {
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Lax,
