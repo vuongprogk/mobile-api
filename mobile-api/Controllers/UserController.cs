@@ -79,6 +79,8 @@ namespace mobile_api.Controllers
             {
                 _logger.LogInformation($"{nameof(UserController)} action: {nameof(CreateUser)}");
                 var user = request.Adapt<User>();
+                // hash password
+                user.HashPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 var response = new GlobalResponse()
                 {
                     Data = await _userService.CreateUser(user),

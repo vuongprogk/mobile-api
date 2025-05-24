@@ -16,5 +16,7 @@ namespace mobile_api.Models
         public DateTime BookingDate { get; set; } = DateTime.Now;
         public int Quantity { get; set; }
         public string Status { get; set; } = "Pending";
+        public decimal TotalPrice { get; set; }
+        
     }
 }

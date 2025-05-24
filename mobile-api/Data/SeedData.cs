@@ -21,9 +21,11 @@ namespace mobile_api.Data
             // Seed admin user
             await SeedAdminUser(userRepository, context);
 
+            // Seed tags and categories
+            //await SeedSampleTagsAndCategories(context);
+
             // Seed sample data
-            var tours = await SeedSampleTours(tourRepository, context);
-            await SeedSampleServices(serviceRepository, tours, context);
+            var tours = await SeedSampleTours(tourRepository, context, serviceRepository);
             await SeedSampleUsers(userRepository, context);
             await SeedSampleBookings(bookRepository, tours, context);
         }
@@ -46,10 +48,115 @@ namespace mobile_api.Data
             }
         }
 
-        private static async Task<List<Tour>> SeedSampleTours(ITourRepository tourRepository, ApplicationDbContext context)
+        private static async Task<List<Tour>> SeedSampleTours(ITourRepository tourRepository, ApplicationDbContext context, IServiceRepository serviceRepository)
         {
-            var tours = await tourRepository.GetToursAsync();
-            if (!tours.Any())
+            if (!context.Services.Any())
+            {
+                var sampleServices = new List<Service>
+                {
+                    new Service
+                    {
+                        Name = "Airport Transfer",
+                        Description = "Comfortable transfer from airport to hotel",
+                        Price = 12,
+                    },
+                    new Service
+                    {
+                        Name = "City Tour Guide",
+                        Description = "Professional guide for city exploration",
+                        Price = 25,
+                    },
+                    new Service
+                    {
+                        Name = "Hotel Booking",
+                        Description = "Assistance with hotel reservations",
+                        Price = 50,
+                    },
+                    new Service
+                    {
+                        Name = "Local Food Tour",
+                        Description = "Experience authentic local cuisine",
+                        Price = 30,
+                    },
+                    new Service
+                    {
+                        Name = "Traditional Craft Workshop",
+                        Description = "Learn traditional crafts from local artisans",
+                        Price = 40,
+                    },
+                    new Service
+                    {
+                        Name = "Mountain Guide",
+                        Description = "Experienced guide for trekking",
+                        Price = 60,
+                    },
+                    new Service
+                    {
+                        Name = "Equipment Rental",
+                        Description = "Trekking equipment rental service",
+                        Price = 20,
+                    },
+                    new Service
+                    {
+                        Name = "Boat Tour",
+                        Description = "River cruise through Mekong Delta",
+                        Price = 70,
+                    },
+                    new Service
+                    {
+                        Name = "Floating Market Visit",
+                        Description = "Visit traditional floating markets",
+                        Price = 15,
+                    },
+                    new Service
+                    {
+                        Name = "Historical Guide",
+                        Description = "Expert guide for historical sites",
+                        Price = 35,
+                    }
+                };
+
+                context.Services.AddRange(sampleServices);
+            }
+            if (!context.Tags.Any())
+            {
+                var tags = new List<Tag>
+                {
+                    new Tag { Name = "Beach" },
+                    new Tag { Name = "Mountain" },
+                    new Tag { Name = "City" },
+                    new Tag { Name = "Adventure" },
+                    new Tag { Name = "Relaxation" }
+                };
+
+                context.Tags.AddRange(tags);
+            }
+
+            if (!context.Categories.Any())
+            {
+                var categories = new List<Category>
+                {
+                    new Category { Name = "Adventure" },
+                    new Category { Name = "Cultural" },
+                    new Category { Name = "Nature" },
+                    new Category { Name = "Luxury" },
+                    new Category { Name = "Budget" }
+                };
+
+                context.Categories.AddRange(categories);
+            }
+
+            await context.SaveChangesAsync();
+
+            var beachTag = context.Tags.FirstOrDefault(t => t.Name == "Beach");
+            var mountainTag = context.Tags.FirstOrDefault(t => t.Name == "Mountain");
+            var adventureCategory = context.Categories.FirstOrDefault(c => c.Name == "Adventure");
+            var culturalCategory = context.Categories.FirstOrDefault(c => c.Name == "Cultural");
+            var airportTransferService = context.Services.FirstOrDefault(s => s.Name == "Airport Transfer");
+            var cityTourGuideService = context.Services.FirstOrDefault(s => s.Name == "City Tour Guide");
+            var hotelBookingService = context.Services.FirstOrDefault(s => s.Name == "Hotel Booking");
+
+            if (!context.Tours.Any())
             {
                 var sampleTours = new List<Tour>
                 {
@@ -61,17 +168,15 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(7),
                         EndDate = DateTime.Now.AddDays(10),
                         Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
-                    },
-                    new Tour
-                    {
-                        Name = "Hoi An Ancient Town",
-                        Destination = "Hoi An",
-                        Price = 149.99m,
-                        StartDate = DateTime.Now.AddDays(5),
-                        EndDate = DateTime.Now.AddDays(6),
-                        Description = "Explore the historic charm of Hoi An Ancient Town",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { beachTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
                     },
                     new Tour
                     {
@@ -81,116 +186,61 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(10),
                         EndDate = DateTime.Now.AddDays(12),
                         Description = "Trek through the beautiful terraced rice fields of Sapa",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
+                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+                        Categories = new List<Category> { adventureCategory, culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
                     },
                     new Tour
                     {
-                        Name = "Mekong Delta Explorer",
+                        Name = "Mekong Delta Adventure",
                         Destination = "Mekong Delta",
-                        Price = 249.99m,
+                        Price = 149.99m,
                         StartDate = DateTime.Now.AddDays(15),
-                        EndDate = DateTime.Now.AddDays(17),
-                        Description = "Discover the vibrant life along the Mekong Delta",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
+                        EndDate = DateTime.Now.AddDays(18),
+                        Description = "Explore the vibrant culture of the Mekong Delta",
+                        ImageUrl = "images/mekong_delta.png",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> {  },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
                     },
                     new Tour
                     {
-                        Name = "Hue Imperial City",
+                        Name = "Hue Imperial City Tour",
                         Destination = "Hue",
-                        Price = 179.99m,
+                        Price = 99.99m,
                         StartDate = DateTime.Now.AddDays(20),
                         EndDate = DateTime.Now.AddDays(21),
-                        Description = "Visit the historic Imperial City of Hue",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png"
-                    }
+                        Description = "Discover the history of the Imperial City of Hue",
+                        ImageUrl = "images/hue_city.png",
+                        Categories = new List<Category> { culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }                    }
                 };
 
-                foreach (var tour in sampleTours)
-                {
-                    await tourRepository.AddTourAsync(tour);
-                }
-                await context.SaveChangesAsync();
-                return sampleTours;
-            }
-            return tours.ToList();
-        }
-
-        private static async Task SeedSampleServices(IServiceRepository serviceRepository, List<Tour> tours, ApplicationDbContext context)
-        {
-            var services = await serviceRepository.GetServicesAsync();
-            if (!services.Any())
-            {
-                var sampleServices = new List<Service>
-                {
-                    new Service
-                    {
-                        Name = "Airport Transfer",
-                        Description = "Comfortable transfer from airport to hotel",
-                        TourId = tours[0].Id
-                    },
-                    new Service
-                    {
-                        Name = "City Tour Guide",
-                        Description = "Professional guide for city exploration",
-                        TourId = tours[0].Id
-                    },
-                    new Service
-                    {
-                        Name = "Hotel Booking",
-                        Description = "Assistance with hotel reservations",
-                        TourId = tours[0].Id
-                    },
-                    new Service
-                    {
-                        Name = "Local Food Tour",
-                        Description = "Experience authentic local cuisine",
-                        TourId = tours[1].Id
-                    },
-                    new Service
-                    {
-                        Name = "Traditional Craft Workshop",
-                        Description = "Learn traditional crafts from local artisans",
-                        TourId = tours[1].Id
-                    },
-                    new Service
-                    {
-                        Name = "Mountain Guide",
-                        Description = "Experienced guide for trekking",
-                        TourId = tours[2].Id
-                    },
-                    new Service
-                    {
-                        Name = "Equipment Rental",
-                        Description = "Trekking equipment rental service",
-                        TourId = tours[2].Id
-                    },
-                    new Service
-                    {
-                        Name = "Boat Tour",
-                        Description = "River cruise through Mekong Delta",
-                        TourId = tours[3].Id
-                    },
-                    new Service
-                    {
-                        Name = "Floating Market Visit",
-                        Description = "Visit traditional floating markets",
-                        TourId = tours[3].Id
-                    },
-                    new Service
-                    {
-                        Name = "Historical Guide",
-                        Description = "Expert guide for historical sites",
-                        TourId = tours[4].Id
-                    }
-                };
-
-                foreach (var service in sampleServices)
-                {
-                    await serviceRepository.AddServiceAsync(service);
-                }
+                context.Tours.AddRange(sampleTours);
                 await context.SaveChangesAsync();
             }
+
+            return context.Tours.ToList();
         }
+
+        
 
         private static async Task SeedSampleUsers(IUserRepository userRepository, ApplicationDbContext context)
         {
@@ -216,6 +266,20 @@ namespace mobile_api.Data
                     HashPassword = BCrypt.Net.BCrypt.HashPassword("Password@123"),
                     Email = "mike@example.com",
                     Role = Role.User
+                },
+                new User
+                {
+                    Username = "alice_wonder",
+                    HashPassword = BCrypt.Net.BCrypt.HashPassword("Password@123"),
+                    Email = "alice@example.com",
+                    Role = Role.User
+                },
+                new User
+                {
+                    Username = "bob_builder",
+                    HashPassword = BCrypt.Net.BCrypt.HashPassword("Password@123"),
+                    Email = "bob@example.com",
+                    Role = Role.User
                 }
             };
 
@@ -240,36 +304,120 @@ namespace mobile_api.Data
                 {
                     new Book
                     {
-                        TourId = tours[0].Id,
-                        UserId = users[0].Id,
+                        TourId = tours.FirstOrDefault(t => t.Name == "Ha Long Bay Cruise")?.Id,
+                        UserId = users.FirstOrDefault()?.Id,
                         BookingDate = DateTime.Now,
                         Status = "Confirmed",
                         Quantity = 2
                     },
                     new Book
                     {
-                        TourId = tours[1].Id,
-                        UserId = users[1].Id,
+                        TourId = tours.FirstOrDefault(t => t.Name == "Sapa Trekking")?.Id,
+                        UserId = users.Skip(1).FirstOrDefault()?.Id,
                         BookingDate = DateTime.Now.AddDays(1),
                         Status = "Pending",
                         Quantity = 1
                     },
                     new Book
                     {
-                        TourId = tours[2].Id,
-                        UserId = users[2].Id,
+                        TourId = tours.FirstOrDefault(t => t.Name == "Mekong Delta Adventure")?.Id,
+                        UserId = users.Skip(2).FirstOrDefault()?.Id,
                         BookingDate = DateTime.Now.AddDays(2),
                         Status = "Confirmed",
                         Quantity = 3
+                    },
+                    new Book
+                    {
+                        TourId = tours.FirstOrDefault(t => t.Name == "Hue Imperial City Tour")?.Id,
+                        UserId = users.FirstOrDefault(u => u.Username == "alice_wonder")?.Id,
+                        BookingDate = DateTime.Now.AddDays(3),
+                        Status = "Confirmed",
+                        Quantity = 1
                     }
                 };
 
                 foreach (var booking in sampleBookings)
                 {
-                    await bookRepository.AddBookAsync(booking);
+                    if (booking.TourId != null && booking.UserId != null) // Ensure valid TourId and UserId
+                    {
+                        await bookRepository.AddBookAsync(booking);
+                    }
                 }
                 await context.SaveChangesAsync();
             }
         }
+
+        //private static async Task SeedSampleTagsAndCategories(ApplicationDbContext context)
+        //{
+        //    if (!context.Tags.Any())
+        //    {
+        //        var tags = new List<Tag>
+        //        {
+        //            new Tag { Name = "Beach" },
+        //            new Tag { Name = "Mountain" },
+        //            new Tag { Name = "City" },
+        //            new Tag { Name = "Adventure" },
+        //            new Tag { Name = "Relaxation" }
+        //        };
+
+        //        context.Tags.AddRange(tags);
+        //    }
+
+        //    if (!context.Categories.Any())
+        //    {
+        //        var categories = new List<Category>
+        //        {
+        //            new Category { Name = "Adventure" },
+        //            new Category { Name = "Cultural" },
+        //            new Category { Name = "Nature" },
+        //            new Category { Name = "Luxury" },
+        //            new Category { Name = "Budget" }
+        //        };
+
+        //        context.Categories.AddRange(categories);
+        //    }
+
+        //    await context.SaveChangesAsync();
+
+        //    if (!context.Tours.Any())
+        //    {
+        //        var beachTag = context.Tags.FirstOrDefault(t => t.Name == "Beach");
+        //        var mountainTag = context.Tags.FirstOrDefault(t => t.Name == "Mountain");
+        //        var adventureCategory = context.Categories.FirstOrDefault(c => c.Name == "Adventure");
+        //        var culturalCategory = context.Categories.FirstOrDefault(c => c.Name == "Cultural");
+
+        //        var sampleTours = new List<Tour>
+        //        {
+        //            new Tour
+        //            {
+        //                Name = "Ha Long Bay Cruise",
+        //                Destination = "Ha Long Bay",
+        //                Price = 299.99m,
+        //                StartDate = DateTime.Now.AddDays(7),
+        //                EndDate = DateTime.Now.AddDays(10),
+        //                Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package",
+        //                ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+        //                Categories = new List<Category> { adventureCategory },
+        //                Tags = new List<Tag> { beachTag }
+        //            },
+        //            new Tour
+        //            {
+        //                Name = "Sapa Trekking",
+        //                Destination = "Sapa",
+        //                Price = 199.99m,
+        //                StartDate = DateTime.Now.AddDays(10),
+        //                EndDate = DateTime.Now.AddDays(12),
+        //                Description = "Trek through the beautiful terraced rice fields of Sapa",
+        //                ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+        //                Categories = new List<Category> { adventureCategory, culturalCategory },
+        //                Tags = new List<Tag> { mountainTag }
+        //            }
+        //        };
+
+        //        context.Tours.AddRange(sampleTours);
+        //    }
+
+        //    await context.SaveChangesAsync();
+        //}
     }
-} 
+}

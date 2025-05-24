@@ -16,6 +16,7 @@ namespace mobile_api.Controllers
     {
         private readonly ILogger<ServiceController> _logger;
         private readonly IServiceService _serviceService;
+
         public ServiceController(ILogger<ServiceController> logger, IServiceService serviceService)
         {
             _logger = logger;
@@ -31,7 +32,7 @@ namespace mobile_api.Controllers
                 _logger.LogInformation($"{nameof(ServiceController)} action: {nameof(GetServices)}");
                 var services = await _serviceService.GetServices();
                 var serviceResponses = services.Adapt<IEnumerable<ServiceResponse>>();
-                
+
                 var response = new GlobalResponse()
                 {
                     Data = serviceResponses,
@@ -97,7 +98,7 @@ namespace mobile_api.Controllers
                 _logger.LogInformation($"{nameof(ServiceController)} action: {nameof(GetServiceByTourId)}");
                 var services = await _serviceService.GetServiceByTourId(id);
                 var serviceResponses = services.Adapt<IEnumerable<ServiceResponse>>();
-                
+
                 var response = new GlobalResponse()
                 {
                     Data = serviceResponses,
@@ -208,6 +209,52 @@ namespace mobile_api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{nameof(ServiceController)} action: {nameof(UpdateService)} error");
+                return StatusCode(500, new GlobalResponse()
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+
+        [HttpPut("UpdateTourService/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateTourService([FromRoute] string id,
+            [FromBody] UpdateTourServiceRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new GlobalResponse()
+                    {
+                        Message = "Invalid request data",
+                        StatusCode = 400,
+                        Data = ModelState.Values.SelectMany(v => v.Errors)
+                    });
+                }
+
+                _logger.LogInformation($"{nameof(ServiceController)} action: {nameof(UpdateTourService)}");
+                var result = await _serviceService.UpdateTourService(id, request);
+                if (!result)
+                {
+                    return NotFound(new GlobalResponse()
+                    {
+                        Message = "Service not found",
+                        StatusCode = 404
+                    });
+                }
+
+                var response = new GlobalResponse()
+                {
+                    Message = "Update tour service success",
+                    StatusCode = 200
+                };
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(ServiceController)} action: {nameof(UpdateTourService)} error");
                 return StatusCode(500, new GlobalResponse()
                 {
                     Message = ex.Message,

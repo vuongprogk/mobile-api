@@ -36,5 +36,11 @@ namespace mobile_api.Services
             _logger.LogInformation($"{nameof(TourService)} action: {nameof(UpdateTour)}");
             return await _tour.UpdateTourAsync(tour);
         }
+
+        public async Task<bool> UpdateTourCategoriesAndTags(string tourId, List<int> categoryIds, List<int> tagIds)
+        {
+            _logger.LogInformation($"{nameof(TourService)} action: {nameof(UpdateTourCategoriesAndTags)}");
+            return await _tour.UpdateTourCategoriesAndTagsAsync(tourId, categoryIds, tagIds);
+        }
     }
 }

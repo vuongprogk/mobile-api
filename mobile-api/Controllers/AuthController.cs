@@ -63,7 +63,7 @@ namespace mobile_api.Controllers
                 Response.Cookies.Append("auth", token, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
+                    Secure = false,
                     SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddHours(2)
                 });
@@ -117,6 +117,7 @@ namespace mobile_api.Controllers
             try
             {
                 Response.Cookies.Delete("auth");
+                Response.Cookies.Delete("userInfo");
                 var response = new GlobalResponse()
                 {
                     Message = "Logout success",

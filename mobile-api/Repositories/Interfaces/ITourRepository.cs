@@ -9,5 +9,6 @@ namespace mobile_api.Repositories.Interfaces
         public Task<bool> AddTourAsync(Tour tour);
         public Task<bool> UpdateTourAsync(Tour tour);
         public Task<bool> DeleteTourAsync(string id);
+        public Task<bool> UpdateTourCategoriesAndTagsAsync(string tourId, List<int> categoryIds, List<int> tagIds);
     }
 }

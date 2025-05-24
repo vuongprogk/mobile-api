@@ -1,4 +1,5 @@
-﻿using mobile_api.Models;
+﻿using mobile_api.Dtos.Service;
+using mobile_api.Models;
 
 namespace mobile_api.Services.Interface
 {
@@ -9,5 +10,6 @@ namespace mobile_api.Services.Interface
         Task<IEnumerable<Service>> GetServices();
         Task<bool> CreateService(Service service);
         Task<bool> UpdateService(Service service);
+        Task<bool> UpdateTourService(string id, UpdateTourServiceRequest request);
     }
 }

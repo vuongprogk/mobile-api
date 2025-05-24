@@ -48,7 +48,13 @@ namespace mobile_api.Repositories
         public async Task<IEnumerable<Service>> GetServicesByTourIdAsync(string tourId)
         {
             _logger.LogInformation($"{nameof(ServiceRepository)} action: {nameof(GetServicesByTourIdAsync)}");
-            var services = _context.Services.Where(item => item.TourId == tourId);
+            if (string.IsNullOrEmpty(tourId))
+            {
+                return null;
+            }
+            var tour = await _context.Tours.FirstOrDefaultAsync(item => item.Id == tourId);
+            
+            var services = _context.Services.Where(item => item.Tours.Contains(tour));
             return await services.ToListAsync();
         }
 

@@ -147,12 +147,11 @@ namespace mobile_api.Controllers
 
                 var response = new GlobalResponse()
                 {
-                    Data = book,
                     Message = "Create booking success",
                     StatusCode = 201
                 };
 
-                return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, response);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -190,6 +189,38 @@ namespace mobile_api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{nameof(BookController)} action: {nameof(GetBookByUsername)} error");
+                return StatusCode(500, new GlobalResponse()
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+
+        [HttpGet("GetBooksWithDetails")]
+        public async Task<IActionResult> GetBooksWithDetails()
+        {
+            try
+            {
+                _logger.LogInformation($"{nameof(BookController)} action: {nameof(GetBooksWithDetails)}");
+                var isAdmin = User.IsInRole("Admin");
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                var books = isAdmin 
+                    ? await _bookService.GetBooksWithDetails() 
+                    : (await _bookService.GetBooksWithDetails()).Where(b => b.UserId == userId);
+
+                var response = new GlobalResponse()
+                {
+                    Data = books,
+                    Message = "Get books with details success",
+                    StatusCode = 200
+                };
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(BookController)} action: {nameof(GetBooksWithDetails)} error");
                 return StatusCode(500, new GlobalResponse()
                 {
                     Message = ex.Message,

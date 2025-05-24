@@ -1,3 +1,6 @@
+using mobile_api.Models;
+using Newtonsoft.Json;
+
 namespace mobile_api.Dtos.Tour
 {
     public class TourResponse
@@ -10,5 +13,7 @@ namespace mobile_api.Dtos.Tour
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
+        [JsonIgnore] public List<Tag> Tags { get; set; } = new List<Tag>();
+        [JsonIgnore] public List<Category> Categories { get; set; } = new List<Category>();
     }
-} 
+}

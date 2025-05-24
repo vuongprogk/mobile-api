@@ -68,5 +68,28 @@ namespace mobile_api.Repositories
             _db.Update(book);
             return await _db.SaveChangesAsync() > 0;
         }
+
+        public async Task<IEnumerable<BookResponse>> GetBooksWithDetailsAsync()
+        {
+            _logger.LogInformation($"{nameof(BookRepository)} action: {nameof(GetBooksWithDetailsAsync)}");
+            return await _db.Bookings
+                .Include(b => b.Tour)
+                .Join(_db.Users, 
+                      booking => booking.UserId, 
+                      user => user.Id, 
+                      (booking, user) => new BookResponse
+                      {
+                          Id = booking.Id,
+                          UserId = booking.UserId,
+                          Username = user.Username,
+                          TourId = booking.TourId,
+                          TourName = booking.Tour.Name,
+                          BookingDate = booking.BookingDate,
+                          Quantity = booking.Quantity,
+                          Status = booking.Status,
+                            TotalPrice = booking.TotalPrice,
+                      })
+                .ToListAsync();
+        }
     }
 }

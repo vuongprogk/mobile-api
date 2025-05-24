@@ -22,6 +22,51 @@ namespace mobile_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CategoryTour", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToursId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CategoriesId", "ToursId");
+
+                    b.HasIndex("ToursId");
+
+                    b.ToTable("TourCategories", (string)null);
+                });
+
+            modelBuilder.Entity("ServiceTour", b =>
+                {
+                    b.Property<string>("ServicesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ToursId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ServicesId", "ToursId");
+
+                    b.HasIndex("ToursId");
+
+                    b.ToTable("TourServices", (string)null);
+                });
+
+            modelBuilder.Entity("TagTour", b =>
+                {
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToursId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TagsId", "ToursId");
+
+                    b.HasIndex("ToursId");
+
+                    b.ToTable("TourTags", (string)null);
+                });
+
             modelBuilder.Entity("mobile_api.Models.Book", b =>
                 {
                     b.Property<string>("Id")
@@ -37,6 +82,9 @@ namespace mobile_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("TourId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -50,6 +98,27 @@ namespace mobile_api.Migrations
                     b.HasIndex("TourId");
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("mobile_api.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("mobile_api.Models.ImageTour", b =>
@@ -90,13 +159,29 @@ namespace mobile_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TourId")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("mobile_api.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("mobile_api.Models.Ticket", b =>
@@ -192,6 +277,51 @@ namespace mobile_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CategoryTour", b =>
+                {
+                    b.HasOne("mobile_api.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mobile_api.Models.Tour", null)
+                        .WithMany()
+                        .HasForeignKey("ToursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ServiceTour", b =>
+                {
+                    b.HasOne("mobile_api.Models.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mobile_api.Models.Tour", null)
+                        .WithMany()
+                        .HasForeignKey("ToursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TagTour", b =>
+                {
+                    b.HasOne("mobile_api.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mobile_api.Models.Tour", null)
+                        .WithMany()
+                        .HasForeignKey("ToursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("mobile_api.Models.Book", b =>

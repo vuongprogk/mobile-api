@@ -11,5 +11,6 @@ namespace mobile_api.Repositories.Interfaces
         public Task<bool> UpdateBookAsync(Book book);
         public Task<bool> DeleteBookAsync(string id);
         Task<IEnumerable<Book>> GetBookByUsernameAsync(string username);
+        Task<IEnumerable<BookResponse>> GetBooksWithDetailsAsync();
     }
 }

@@ -38,6 +38,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IBookRepository, BookRepository>();
 builder.Services.AddTransient<ITourRepository, TourRepository>();
 builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
+builder.Services.AddTransient<ITourReleventRepository, TourReleventRepository>();
 builder.Services.AddTransient<ITicketRepository,TicketRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
@@ -88,7 +89,7 @@ builder.Services.AddSwaggerGen(c =>
     }
 });
 
-builder.Services.AddCors(builder => builder.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+builder.Services.AddCors(builder => builder.AddPolicy("AllowFrontend", p => p.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 
 var app = builder.Build();
 
@@ -106,7 +107,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 app.UseMiddleware<AuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

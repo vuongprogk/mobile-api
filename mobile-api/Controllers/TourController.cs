@@ -69,6 +69,7 @@ namespace mobile_api.Controllers
                 }
 
                 var tourResponse = tour.Adapt<TourResponse>();
+
                 var response = new GlobalResponse()
                 {
                     Data = tourResponse,
@@ -165,7 +166,7 @@ namespace mobile_api.Controllers
 
         [HttpPut("UpdateTour/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateTour([FromRoute] string id, [FromBody] UpdateTourRequest request)
+        public async Task<IActionResult> UpdateTour([FromRoute] string id, [FromForm] UpdateTourRequest request)
         {
             try
             {
@@ -212,9 +213,14 @@ namespace mobile_api.Controllers
                     imageName = Path.Combine("images", imageName);
                     tourExists.ImageUrl = imageName;
                 }
-                
-                
-                
+                // update tour
+                tourExists.Name = request.Name;
+                tourExists.Destination = request.Destination;
+                tourExists.Price = request.Price;
+                tourExists.StartDate = request.StartDate;
+                tourExists.EndDate = request.EndDate;
+                tourExists.Description = request.Description;
+
                 var result = await _tourService.UpdateTour(tourExists);
                 if (!result)
                 {
@@ -246,6 +252,52 @@ namespace mobile_api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{nameof(TourController)} action: {nameof(UpdateTour)} error");
+                return StatusCode(500, new GlobalResponse()
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+
+        [HttpPut("UpdateTourCategoriesAndTags/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateTourCategoriesAndTags([FromRoute] string id, [FromBody] UpdateTourCategoriesAndTagsRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new GlobalResponse()
+                    {
+                        Message = "Invalid request data",
+                        StatusCode = 400,
+                        Data = ModelState.Values.SelectMany(v => v.Errors)
+                    });
+                }
+
+                _logger.LogInformation($"{nameof(TourController)} action: {nameof(UpdateTourCategoriesAndTags)}");
+
+                var result = await _tourService.UpdateTourCategoriesAndTags(id, request.CategoryIds, request.TagIds);
+
+                if (!result)
+                {
+                    return NotFound(new GlobalResponse()
+                    {
+                        Message = "Tour not found or update failed",
+                        StatusCode = 404
+                    });
+                }
+
+                return Ok(new GlobalResponse()
+                {
+                    Message = "Update categories and tags success",
+                    StatusCode = 200
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(TourController)} action: {nameof(UpdateTourCategoriesAndTags)} error");
                 return StatusCode(500, new GlobalResponse()
                 {
                     Message = ex.Message,
