@@ -27,5 +27,4 @@ RUN dotnet publish "./mobile-api.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN mkdir -p /app/wwwroot/images && chmod -R 777 /app/wwwroot
 ENTRYPOINT ["dotnet", "mobile-api.dll"]

@@ -35,6 +35,15 @@ namespace mobile_api.Controllers
                     });
                 }
 
+                var token = await _authService.LoginAsync(request);
+                if (string.IsNullOrEmpty(token))
+                {
+                    return new JsonResult(new GlobalResponse()
+                    {
+                        Message = "Login failed",
+                        StatusCode = 401
+                    });
+                }
                 var userInfo = new
                 {
                     user.Username,
@@ -50,22 +59,13 @@ namespace mobile_api.Controllers
                     Path = "/",
                     Expires = DateTimeOffset.UtcNow.AddDays(7)
                 });
-                var token = await _authService.LoginAsync(request);
-                if (string.IsNullOrEmpty(token))
-                {
-                    return new JsonResult(new GlobalResponse()
-                    {
-                        Message = "Login failed",
-                        StatusCode = 401
-                    });
-                }
 
                 Response.Cookies.Append("auth", token, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = false,
                     SameSite = SameSiteMode.Lax,
-                    Expires = DateTimeOffset.UtcNow.AddHours(2)
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
                 });
                 var response = new GlobalResponse()
                 {

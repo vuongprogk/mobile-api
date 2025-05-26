@@ -14,7 +14,7 @@
     depends_on:
       - db
     volumes:
-      - ./mobile-api/wwwroot:/app/wwwroot:rw
+      - ./mobile-api/wwwroot:/app/wwwroot
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
