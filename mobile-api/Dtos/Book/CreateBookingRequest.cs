@@ -13,9 +13,5 @@ namespace mobile_api.Dtos.Book
 
         [Required(ErrorMessage = "Booking date is required")]
         public DateTime BookingDate { get; set; }
-
-        [Required(ErrorMessage = "Status is required")]
-        [RegularExpression("^(Pending|Confirmed|Cancelled|Completed)$", ErrorMessage = "Status must be one of: Pending, Confirmed, Cancelled, Completed")]
-        public string Status { get; set; } = "Pending";
     }
 }

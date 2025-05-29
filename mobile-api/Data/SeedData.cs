@@ -168,7 +168,7 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(7),
                         EndDate = DateTime.Now.AddDays(10),
                         Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+                        ImageUrl = "images/halong_bay.jpg",
                         Categories = new List<Category> { adventureCategory },
                         Tags = new List<Tag> { beachTag },
                         Services = new List<Service>()
@@ -186,7 +186,7 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(10),
                         EndDate = DateTime.Now.AddDays(12),
                         Description = "Trek through the beautiful terraced rice fields of Sapa",
-                        ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
+                        ImageUrl = "images/sapa_trekking.jpg",
                         Categories = new List<Category> { adventureCategory, culturalCategory },
                         Tags = new List<Tag> { mountainTag },
                         Services = new List<Service>()
@@ -204,7 +204,7 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(15),
                         EndDate = DateTime.Now.AddDays(18),
                         Description = "Explore the vibrant culture of the Mekong Delta",
-                        ImageUrl = "images/mekong_delta.png",
+                        ImageUrl = "images/mekong_delta.jpg",
                         Categories = new List<Category> { adventureCategory },
                         Tags = new List<Tag> {  },
                         Services = new List<Service>()
@@ -222,7 +222,7 @@ namespace mobile_api.Data
                         StartDate = DateTime.Now.AddDays(20),
                         EndDate = DateTime.Now.AddDays(21),
                         Description = "Discover the history of the Imperial City of Hue",
-                        ImageUrl = "images/hue_city.png",
+                        ImageUrl = "images/hue_city.jpg",
                         Categories = new List<Category> { culturalCategory },
                         Tags = new List<Tag> { mountainTag },
                         Services = new List<Service>()
@@ -230,7 +230,170 @@ namespace mobile_api.Data
                             airportTransferService,
                             cityTourGuideService,
                             hotelBookingService
-                        }                    }
+                        }                    },
+                    new Tour
+                    {
+                        Name = "Phu Quoc Island Getaway",
+                        Destination = "Phu Quoc",
+                        Price = 399.99m,
+                        StartDate = DateTime.Now.AddDays(25),
+                        EndDate = DateTime.Now.AddDays(30),
+                        Description = "Relax on the beautiful beaches of Phu Quoc Island",
+                        ImageUrl = "images/phu_quoc.jpg",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { beachTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Da Nang City Tour",
+                        Destination = "Da Nang",
+                        Price = 89.99m,
+                        StartDate = DateTime.Now.AddDays(5),
+                        EndDate = DateTime.Now.AddDays(6),
+                        Description = "Explore the beautiful city of Da Nang with its beaches and mountains",
+                        ImageUrl = "images/da_nang.jpg",
+                        Categories = new List<Category> { culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Nha Trang Beach Resort",
+                        Destination = "Nha Trang",
+                        Price = 299.99m,
+                        StartDate = DateTime.Now.AddDays(12),
+                        EndDate = DateTime.Now.AddDays(15),
+                        Description = "Enjoy a luxurious beach resort experience in Nha Trang",
+                        ImageUrl = "images/nha_trang.jpg",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { beachTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Phong Nha Cave Exploration",
+                        Destination = "Phong Nha",
+                        Price = 179.99m,
+                        StartDate = DateTime.Now.AddDays(22),
+                        EndDate = DateTime.Now.AddDays(24),
+                        Description = "Discover the stunning caves of Phong Nha",
+                        ImageUrl = "images/phong_nha.jpg",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Hanoi City Highlights",
+                        Destination = "Hanoi",
+                        Price = 79.99m,
+                        StartDate = DateTime.Now.AddDays(3),
+                        EndDate = DateTime.Now.AddDays(4),
+                        Description = "Explore the rich history and culture of Hanoi",
+                        ImageUrl = "images/hanoi_city.jpg",
+                        Categories = new List<Category> { culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Hoi An Ancient Town",
+                        Destination = "Hoi An",
+                        Price = 89.99m,
+                        StartDate = DateTime.Now.AddDays(8),
+                        EndDate = DateTime.Now.AddDays(9),
+                        Description = "Experience the charm of Hoi An's ancient town",
+                        ImageUrl = "images/hoi_an.jpg",
+                        Categories = new List<Category> { culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Con Dao Island Retreat",
+                        Destination = "Con Dao",
+                        Price = 499.99m,
+                        StartDate = DateTime.Now.AddDays(28),
+                        EndDate = DateTime.Now.AddDays(35),
+                        Description = "A serene retreat on the beautiful Con Dao Island",
+                        ImageUrl = "images/con_dao.jpg",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { beachTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "Cat Ba Island Adventure",
+                        Destination = "Cat Ba Island",
+                        Price = 249.99m,
+                        StartDate = DateTime.Now.AddDays(14),
+                        EndDate = DateTime.Now.AddDays(16),
+                        Description = "Adventure awaits on Cat Ba Island with trekking and kayaking",
+                        ImageUrl = "images/cat_ba.jpg",
+                        Categories = new List<Category> { adventureCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    },
+                    new Tour
+                    {
+                        Name = "My Son Sanctuary Tour",
+                        Destination = "My Son",
+                        Price = 69.99m,
+                        StartDate = DateTime.Now.AddDays(18),
+                        EndDate = DateTime.Now.AddDays(19),
+                        Description = "Explore the ancient ruins of My Son Sanctuary",
+                        ImageUrl = "images/my_son.png",
+                        Categories = new List<Category> { culturalCategory },
+                        Tags = new List<Tag> { mountainTag },
+                        Services = new List<Service>()
+                        {
+                            airportTransferService,
+                            cityTourGuideService,
+                            hotelBookingService
+                        }
+                    }
+
                 };
 
                 context.Tours.AddRange(sampleTours);
@@ -240,7 +403,7 @@ namespace mobile_api.Data
             return context.Tours.ToList();
         }
 
-        
+
 
         private static async Task SeedSampleUsers(IUserRepository userRepository, ApplicationDbContext context)
         {
@@ -347,77 +510,6 @@ namespace mobile_api.Data
             }
         }
 
-        //private static async Task SeedSampleTagsAndCategories(ApplicationDbContext context)
-        //{
-        //    if (!context.Tags.Any())
-        //    {
-        //        var tags = new List<Tag>
-        //        {
-        //            new Tag { Name = "Beach" },
-        //            new Tag { Name = "Mountain" },
-        //            new Tag { Name = "City" },
-        //            new Tag { Name = "Adventure" },
-        //            new Tag { Name = "Relaxation" }
-        //        };
-
-        //        context.Tags.AddRange(tags);
-        //    }
-
-        //    if (!context.Categories.Any())
-        //    {
-        //        var categories = new List<Category>
-        //        {
-        //            new Category { Name = "Adventure" },
-        //            new Category { Name = "Cultural" },
-        //            new Category { Name = "Nature" },
-        //            new Category { Name = "Luxury" },
-        //            new Category { Name = "Budget" }
-        //        };
-
-        //        context.Categories.AddRange(categories);
-        //    }
-
-        //    await context.SaveChangesAsync();
-
-        //    if (!context.Tours.Any())
-        //    {
-        //        var beachTag = context.Tags.FirstOrDefault(t => t.Name == "Beach");
-        //        var mountainTag = context.Tags.FirstOrDefault(t => t.Name == "Mountain");
-        //        var adventureCategory = context.Categories.FirstOrDefault(c => c.Name == "Adventure");
-        //        var culturalCategory = context.Categories.FirstOrDefault(c => c.Name == "Cultural");
-
-        //        var sampleTours = new List<Tour>
-        //        {
-        //            new Tour
-        //            {
-        //                Name = "Ha Long Bay Cruise",
-        //                Destination = "Ha Long Bay",
-        //                Price = 299.99m,
-        //                StartDate = DateTime.Now.AddDays(7),
-        //                EndDate = DateTime.Now.AddDays(10),
-        //                Description = "Experience the stunning beauty of Ha Long Bay with our luxury cruise package",
-        //                ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
-        //                Categories = new List<Category> { adventureCategory },
-        //                Tags = new List<Tag> { beachTag }
-        //            },
-        //            new Tour
-        //            {
-        //                Name = "Sapa Trekking",
-        //                Destination = "Sapa",
-        //                Price = 199.99m,
-        //                StartDate = DateTime.Now.AddDays(10),
-        //                EndDate = DateTime.Now.AddDays(12),
-        //                Description = "Trek through the beautiful terraced rice fields of Sapa",
-        //                ImageUrl = "images/69b88aec-fdd1-4c8d-a885-82a87444d259.png",
-        //                Categories = new List<Category> { adventureCategory, culturalCategory },
-        //                Tags = new List<Tag> { mountainTag }
-        //            }
-        //        };
-
-        //        context.Tours.AddRange(sampleTours);
-        //    }
-
-        //    await context.SaveChangesAsync();
-        //}
+    
     }
 }

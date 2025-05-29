@@ -132,7 +132,7 @@ namespace mobile_api.Controllers
                     UserId = userId,
                     Quantity = request.Quantity,
                     BookingDate = DateTime.UtcNow,
-                    Status = request.Status
+                    Status = "Created"
                 };
 
                 var result = await _bookService.CreateBook(book);
